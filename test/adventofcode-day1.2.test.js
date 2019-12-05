@@ -1,5 +1,5 @@
-var expect = require("chai").expect;
-var converter = require("../adventofcode-day1.js");
+// var expect = require("chai").expect;
+// var converter = require("../adventofcode-day1.1.js");
 
 // describe("Calculate Fuel", function() {
 //   it("converts 12 mass to fuel units", function() {
