@@ -23,11 +23,14 @@ for (password = rangeMin; password < rangeMax; password++){
 
 console.log(`Total Passwords: `,rawPasswords.length)
 
-var twoDigitsPassword = rawPasswords.filter(password => twoDigitsPasswordFilter(password));
+var twoDigitsPassword = rawPasswords.filter(password => exactlyTwoDigitsPasswordFilter(password));
 console.log(`Two Digit Passwords: `,twoDigitsPassword.length)
 
 var increasingPassword = twoDigitsPassword.filter(password => increasingPasswordFilter(password));
 console.log(`Increasing Passwords: `,increasingPassword.length)
+
+// var lessThanThreeDigitPassword = increasingPassword.filter(password => lessThanThreeDigitPassword(password));
+// console.log(`Less Than Three consequtive Passwords: `, lessThanThreeDigitPassword.length)
 
 function twoDigitsPasswordFilter(password){
 var twoDigits = false;
@@ -44,6 +47,22 @@ var previousChar;
   }
 return twoDigits;
 }
+
+function exactlyTwoDigitsPasswordFilter(password){
+  var exactlyTwoDigits = false;
+  var passwordChars = [];
+    for (char = 0; char < password.toString().length; char++){
+      passwordChars.push(password.toString().charAt(char));
+    }
+    for (char = 0; char < passwordChars.length; char++){
+      if(passwordChars[char] == passwordChars[char-1] 
+      && passwordChars[char] != passwordChars[char-2] 
+      && passwordChars[char] != passwordChars[char+1]){
+        exactlyTwoDigits = true;
+      }
+    }
+  return exactlyTwoDigits;
+  }
 
 function increasingPasswordFilter(password){
   var increasingPassword = true;
@@ -96,5 +115,32 @@ describe("Increasing Password checker", function() {
 
   it("mix", function() {
     expect(increasingPasswordFilter(111234)).to.be.true;
+  });
+});
+
+describe("exactly 2 digits Password checker", function() {
+  
+  it("1 digit", function() {
+    expect(exactlyTwoDigitsPasswordFilter(123456)).to.be.false;
+  });
+
+  it("2 digits", function() {
+    expect(exactlyTwoDigitsPasswordFilter(122456)).to.be.true;
+  });
+
+  it("3 digits", function() {
+    expect(exactlyTwoDigitsPasswordFilter(123334)).to.be.false;
+  });
+
+  it("4 digits", function() {
+    expect(exactlyTwoDigitsPasswordFilter(123333)).to.be.false;
+  });
+
+  it("5 digits", function() {
+    expect(exactlyTwoDigitsPasswordFilter(111112)).to.be.false;
+  });
+
+  it("2+4 digits", function() {
+    expect(exactlyTwoDigitsPasswordFilter(111122)).to.be.true;
   });
 });
